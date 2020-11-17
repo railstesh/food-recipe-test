@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-// import { loginUser } from "../apiServices"
-// import { Redirect } from 'react-router';
+import { loginUser } from "../../apiServices"
+import { Redirect } from 'react-router';
 
 class Login extends Component {
   state = {
@@ -25,14 +25,13 @@ class Login extends Component {
     }
     console.log(user)
 
-    // loginUser(user).then((res) => {
-    //   if (res && res.success) {
-    //     this.setState({ userLogin: true })
-    //   } else {
-    //     this.setState({ error: "something wrong" })
-    //   }
-    // })
-
+    loginUser(user).then((res) => {
+      if (res && res.success) {
+        this.setState({ userLogin: true, userId: "", password: "" })
+      } else {
+        this.setState({ error: "something wrong" })
+      }
+    })
   };
 
   handleChange = (event) => {
@@ -55,7 +54,6 @@ class Login extends Component {
 
     return (
       <>
-        {/* {userLogin && <Redirect to={`/user_page/${userId}`} />} */}
         <div className="row">
           <div className="col-md-3">
           </div>
