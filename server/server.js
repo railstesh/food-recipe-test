@@ -3,6 +3,7 @@ const path = require("path")
 const bodyParser = require("body-parser")
 const cors = require("cors");
 const userRoutes = require("./routes/userRoute")
+const foodRecipeRoutes = require("./routes/foodRecipeRoute")
 const mongo = require('./configs/dbConfig')
 const app = express()
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 app.use("/api/user", userRoutes)
+app.use("/api", foodRecipeRoutes)
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*")

@@ -1,0 +1,11 @@
+const express = require("express")
+const foodRecipeController = require("../controllers/foodRecipeController")
+
+const router = express.Router()
+
+router.post("/add_recipe", foodRecipeController.addRecipe)
+router.get("/get_recipe", foodRecipeController.getRecipe)
+router.get("/fetch_recipes", foodRecipeController.fetchRecipes)
+router.put("/edit_recipe", foodRecipeController.editRecipe)
+
+module.exports = router
