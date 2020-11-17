@@ -1,10 +1,12 @@
-import "bootstrap/dist/css/bootstrap.css"
+import "bootstrap/dist/css/bootstrap.css";
 
 import AppRoutes from "./AppRoutes";
+import Header from "./components/header/Header";
 
 const App = () => {
   return (
-    <div className="container">
+    <div>
+      <Header />
       <AppRoutes />
     </div>
   );

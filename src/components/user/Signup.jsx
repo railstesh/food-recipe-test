@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { signupUser } from "../../apiServices"
-// import { Redirect } from 'react-router';
+import { Redirect } from 'react-router';
 
 class Signup extends Component {
   state = {
@@ -54,6 +54,7 @@ class Signup extends Component {
     const {
       state: {
         userName,
+        userSignup,
         userId,
         password,
         error,
@@ -62,6 +63,7 @@ class Signup extends Component {
 
     return (
       <>
+        {userSignup && <Redirect to={`/home`} />}
         <div className="row">
           <div className="col-md-3">
           </div>

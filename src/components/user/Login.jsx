@@ -54,6 +54,7 @@ class Login extends Component {
 
     return (
       <>
+        {userLogin && <Redirect to={`/home`} />}
         <div className="row">
           <div className="col-md-3">
           </div>
