@@ -16,7 +16,6 @@ export const loginUser = (user) => {
 }
 
 export const signupUser = (user) => {
-	debugger
   return axios.post(`${api}/user/signup`, user)
 		.then((res) => {
 			if (res.status === 201) {

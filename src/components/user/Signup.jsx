@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import { signupUser } from "../../apiServices"
 // import { Redirect } from 'react-router';
 
 class Signup extends Component {
   state = {
     userId: '',
     password: '',
-    error: '',
+    userName: '',
     userSignup: false,
   }
 
@@ -13,24 +14,31 @@ class Signup extends Component {
     event.preventDefault();
     const {
       state: {
+        userName,
         password,
         userId,
       },
     } = this;
 
     const user = {
+      userName,
       userId,
       password,
     }
     console.log(user)
-
-    // SignupUser(user).then((res) => {
-    //   if (res && res.success) {
-    //     this.setState({ userSignup: true })
-    //   } else {
-    //     this.setState({ error: "something wrong" })
-    //   }
-    // })
+    signupUser(user).then((res) => {
+      if (res && res.success) {
+        this.setState({
+          userSignup: true,
+          userId: "",
+          password: "",
+          userName: ""
+        })
+        console.log("sucess")
+      } else {
+        this.setState({ error: "something wrong" })
+      }
+    })
 
   };
 
@@ -45,16 +53,15 @@ class Signup extends Component {
   render() {
     const {
       state: {
+        userName,
         userId,
         password,
         error,
-        userSignup,
       },
     } = this;
 
     return (
       <>
-        {/* {userSignup && <Redirect to={`/user_page/${userId}`} />} */}
         <div className="row">
           <div className="col-md-3">
           </div>
@@ -75,6 +82,23 @@ class Signup extends Component {
                       onChange={this.handleChange}
                     />
                   </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-group col-md-12 p-4 mb-0">
+                    <label>User Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="userName"
+                      value={userName}
+                      name="userName"
+                      placeholder="user@123"
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                  {error && <div className="ml-5 ">
+                    <p className="text-danger">{error}</p></div>
+                  }
                 </div>
                 <div className="form-row">
                   <div className="form-group col-md-12 p-4 mb-0">
