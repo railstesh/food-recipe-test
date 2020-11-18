@@ -47,7 +47,9 @@ const FoodRecipeCard = ({
                     }
                   </div>
                   <div className="col-2">
-                    <i style={{ cursor: "pointer" }} className="fas fa-edit"></i>
+                    <Link to={`/edit_recipe/${data.recipeId}`}>
+                      <i style={{ cursor: "pointer" }} className="fas fa-edit"></i>
+                    </Link>
                   </div>
                   <div className="col-2">
                     <i style={{ cursor: "pointer" }} onClick={() => toggleModal(data.recipeId)} className="fas fa-trash"></i>

@@ -5,7 +5,7 @@ export const loginUser = (user) => {
   return axios.post(`${api}/user/login`, user)
 		.then((res) => {
 			if (res.status === 200) {
-        return { success: true }
+        return { success: true, data: res.data }
 			} else {
 				return { success: false }
 			}
@@ -64,7 +64,6 @@ export const getFoodRecipeDetails = (recipeId) => {
 }
 
 export const deleteRecipe = (recipeId) => {
-	debugger
 	return axios.post(`${api}/delete_recipe`, recipeId)
 		.then((res) => {
 			if (res.status === 200) {
@@ -73,5 +72,17 @@ export const deleteRecipe = (recipeId) => {
 		})
 		.catch((error) => {
 			console.log('recipes delete error', error)
+		})
+}
+
+export const updateRecipe = (recipe) => {
+	return axios.put(`${api}/edit_recipe`, recipe)
+		.then((res) => {
+			if (res.status === 200) {
+				return { success: true }
+			}
+		})
+		.catch((error) => {
+			console.log('recipes edit error', error)
 		})
 }

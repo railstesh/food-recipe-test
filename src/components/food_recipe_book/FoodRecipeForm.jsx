@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { addFoodRecipes } from '../../apiServices';
 import { Redirect } from 'react-router';
+
+import { addFoodRecipes, getFoodRecipeDetails, updateRecipe } from '../../apiServices';
 
 class FoodRecipeForm extends Component {
   state = {
@@ -13,6 +14,35 @@ class FoodRecipeForm extends Component {
     error: '',
     ingredientsError: '',
     addedSuccessfully: false
+  }
+
+  componentDidMount() {
+    const {
+      match: { params: { recipeId } }
+    } = this.props
+
+    if (recipeId) {
+      getFoodRecipeDetails({ recipeId }).then((res) => {
+        if (res && res.success) {
+          this.initializeForm(res.data)
+        } else {
+          console.log("something wrong")
+        }
+      })
+    }
+  }
+
+  initializeForm = (data) => {
+    const { recipeDescription, recipeIngredients, recipeName, recipeType,
+    } = data
+    const savedRecord = {
+      recipeIngredients,
+      recipeName,
+      recipeType,
+      recipeDescription,
+    }
+
+    this.setState({ ...savedRecord })
   }
 
   handleChange = (event) => {
@@ -49,35 +79,53 @@ class FoodRecipeForm extends Component {
 
   handleSubmit = (event) => {
     const { recipeName, recipeDescription, recipeType, recipeIngredients } = this.state
+    const {
+      match: { params: { recipeId } }
+    } = this.props
 
     event.preventDefault();
     let recipeUniqueId = Math.random().toString(36).substr(2, 9)
     const recipe = {
       recipeDescription: recipeDescription,
       recipeIngredients: recipeIngredients,
-      recipeId: recipeUniqueId,
+      recipeId: recipeId ? recipeId : recipeUniqueId,
       recipeType: recipeType,
       recipeName: recipeName,
     }
     if (recipeName !== "" && recipeDescription !== "") {
-      addFoodRecipes(recipe).then((res) => {
-        if (res && res.success) {
-          this.setState({
-            recipeDescription: "",
-            recipeIngredients: [], recipeType: '', recipeName: '',
-            addedSuccessfully: true
-          })
-        }
-      })
+      if (recipeId) {
+        updateRecipe(recipe).then((res) => {
+          if (res && res.success) {
+            this.resetState()
+          }
+        })
+      } else {
+        addFoodRecipes(recipe).then((res) => {
+          if (res && res.success) {
+            this.resetState()
+          }
+        })
+      }
     } else {
       this.setState({ error: "fileds required" })
     }
+  }
+
+  resetState = () => {
+    this.setState({
+      recipeDescription: "",
+      recipeIngredients: [], recipeType: '', recipeName: '',
+      addedSuccessfully: true
+    })
   }
 
   render() {
     const { recipeName, recipeType, ingredient, addedSuccessfully,
       recipeDescription, recipeIngredients, error, ingredientsError
     } = this.state
+    const {
+      match: { params: { recipeId } }
+    } = this.props
 
     return (
       <>
@@ -181,7 +229,7 @@ class FoodRecipeForm extends Component {
             <div className="form-group row ">
               <div className="col text-right mt-5">
                 <button className="btn btn-primary" type="submit" onClick={this.handleSubmit}>
-                  Create Recipe
+                  {recipeId ? "Edit Recipe" : "Create Recipe"}
                 </button>
               </div>
             </div>

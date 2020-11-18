@@ -139,6 +139,7 @@ const login = async (req, res) => {
   }
   res.json({
     email: email,
+    userName: existingUser.userName,
     token: token,
   });
 };

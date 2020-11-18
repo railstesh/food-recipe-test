@@ -16,6 +16,7 @@ const AppRoutes = () => {
         <Route exact path="/home" component={FoodRecipeHome} />
         <Route exact path="/recipe_form" component={FoodRecipeForm} />
         <Route exact path="/recipe_page/:recipeId" component={FoodRecipePage} />
+        <Route exact path="/edit_recipe/:recipeId" component={FoodRecipeForm} />
       </Switch>
     </>
   );

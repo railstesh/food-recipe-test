@@ -9,7 +9,6 @@ const addRecipe = async (req, res, next) => {
     recipeName,
     recipeId,
     recipeType,
-    recipeAuthorName,
     recipeDescription,
     recipeIngredients,
     recipeDirections,
@@ -19,7 +18,6 @@ const addRecipe = async (req, res, next) => {
     recipeName,
     recipeId,
     recipeType,
-    recipeAuthorName,
     recipeDescription,
     recipeIngredients,
     recipeDirections,
@@ -56,7 +54,6 @@ const fetchRecipes = async (req, res) => {
 
 const getRecipe = async (req, res) => {
   const { recipeId } = req.body;
-  console.log("MEMMMEMEMEME", recipeId);
   try {
     const recipe = await Recipe.findOne({ recipeId: recipeId });
     return res.send({ recipe: recipe, success: true });
