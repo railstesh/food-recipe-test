@@ -83,7 +83,22 @@ const editRecipe = async (req, res) => {
   }
 };
 
+const deleteRecipe = async (req, res) => {
+  const { recipeId } = req.body;
+  try {
+    const deletedRecipe = await Recipe.findOneAndDelete({ recipeId: recipeId });
+    return res.send({
+      success: true,
+      deletedRecipe: deletedRecipe,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.send({ success: false });
+  }
+};
+
 exports.addRecipe = addRecipe;
 exports.editRecipe = editRecipe;
 exports.fetchRecipes = fetchRecipes;
 exports.getRecipe = getRecipe;
+exports.deleteRecipe = deleteRecipe;
