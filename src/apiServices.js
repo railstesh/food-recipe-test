@@ -38,3 +38,27 @@ export const addFoodRecipes = (recipe) => {
 			console.log('recipes add error', error)
 		})
 }
+
+export const getFoodRecipes = () => {
+	return axios.get(`${api}/fetch_recipes`)
+		.then((res) => {
+			if (res.status === 200) {
+				return { success: true, data: res.data.recipes }
+			}
+		})
+		.catch((error) => {
+			console.log('recipes fetch error', error)
+		})
+}
+
+export const getFoodRecipeDetails = (recipeId) => {
+	return axios.post(`${api}/get_recipe`, recipeId)
+		.then((res) => {
+			if (res.status === 200) {
+				return { success: true, data: res.data.recipe }
+			}
+		})
+		.catch((error) => {
+			console.log('recipes fetch error', error)
+		})
+}

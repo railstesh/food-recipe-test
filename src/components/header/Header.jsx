@@ -6,7 +6,9 @@ const Header = () => {
     <>
       <div className="row p-2 shadow-lg">
         <div className="col-8">
-          <h4>Food Recipe Book</h4>
+          <Link to="/home">
+            <h4 className="text-primary">Food Recipe Book</h4>
+          </Link>
         </div>
         <div className="col-4 text-right">
           <Link to='/recipe_form'>
