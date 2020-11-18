@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 import DeleteModal from './DeleteModal'
 import food5 from '../../assets/images/food5.png'
+import veg from '../../assets/images/veg.png'
+import nonVeg from '../../assets/images/non-veg.png'
 
 const FoodRecipeCard = ({
   data,
@@ -24,23 +26,33 @@ const FoodRecipeCard = ({
             <div className="row">
               <div className="col-8">
                 <Link to={`/recipe_page/${data.recipeId}`}><p className="mb-1">{data.recipeName}</p></Link>
-                <p className="card-category m-0">Author | {data.recipeAuthorName}</p>
               </div>
               <div className="col-4 text-right">
                 <div className="row">
                   <div className="col-2">
-                    {data.recipeType === "non-veg" ? <i className="fas fa-drumstick-bite"></i>
-                      : <i className="fas fa-carrot"></i>
+                    {data.recipeType === "non-veg" ?
+                      <img
+                        height='15px'
+                        width='15px'
+                        src={nonVeg}
+                        alt="avatar"
+                      />
+                      :
+                      <img
+                        height='15px'
+                        width='15px'
+                        src={veg}
+                        alt="avatar"
+                      />
                     }
                   </div>
                   <div className="col-2">
-                    <i className="fas fa-edit"></i>
+                    <i style={{ cursor: "pointer" }} className="fas fa-edit"></i>
                   </div>
                   <div className="col-2">
-                    <i onClick={toggleModal} className="fas fa-trash"></i>
+                    <i style={{ cursor: "pointer" }} onClick={() => toggleModal(data.recipeId)} className="fas fa-trash"></i>
                   </div>
                 </div>
-
               </div>
             </div>
             <p className="card-content mt-1 mb-0">
@@ -55,7 +67,7 @@ const FoodRecipeCard = ({
         message="Are you sure you want to delete this recipe?"
         title="Delete"
         submitButtonName="Delete"
-        onSubmit={() => handleDelete(data.recipeId)}
+        onSubmit={() => handleDelete()}
       />
     </>
   )
@@ -63,10 +75,14 @@ const FoodRecipeCard = ({
 
 FoodRecipeCard.defaultProps = {
   data: {},
+  openModal: false,
 }
 
 FoodRecipeCard.propTypes = {
   data: PropTypes.object,
+  handleDelete: PropTypes.func.isRequired,
+  toggleModal: PropTypes.func.isRequired,
+  openModal: PropTypes.bool,
 }
 
 export default FoodRecipeCard

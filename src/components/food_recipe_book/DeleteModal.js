@@ -18,7 +18,7 @@ const DeleteModal = ({
     {message !== "" && <ModalBody>{message}</ModalBody>}
     <ModalFooter>
       <div className="display-flex">
-        <Button color={submitButtonColor} onClick={onSubmit}>
+        <Button color={submitButtonColor} className="mr-2" onClick={onSubmit}>
           {submitButtonName}
         </Button>
         <Button color="secondary" onClick={toggle}>

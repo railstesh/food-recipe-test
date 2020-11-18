@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
+import { Redirect} from 'react-router'
 import { loginUser } from "../../apiServices"
-import { Redirect } from 'react-router';
 
 class Login extends Component {
   state = {
-    userId: '',
+    email: '',
     password: '',
     error: '',
     userLogin: false,
@@ -15,23 +16,25 @@ class Login extends Component {
     const {
       state: {
         password,
-        userId,
+        email,
       },
     } = this;
 
     const user = {
-      userId,
+      email,
       password,
     }
-    console.log(user)
-
-    loginUser(user).then((res) => {
-      if (res && res.success) {
-        this.setState({ userLogin: true, userId: "", password: "" })
-      } else {
-        this.setState({ error: "something wrong" })
-      }
-    })
+    if (email !== "" && password !== "") {
+      loginUser(user).then((res) => {
+        if (res && res.success) {
+          this.setState({ userLogin: true, email: "", password: "" })
+        } else {
+          this.setState({ error: "Invalid User" })
+        }
+      })
+    } else {
+      this.setState({ error: "Invalid User" })
+    }
   };
 
   handleChange = (event) => {
@@ -45,7 +48,7 @@ class Login extends Component {
   render() {
     const {
       state: {
-        userId,
+        email,
         password,
         error,
         userLogin,
@@ -55,7 +58,7 @@ class Login extends Component {
     return (
       <>
         {userLogin && <Redirect to={`/home`} />}
-        <div className="row">
+        <div className="row m-0">
           <div className="col-md-3">
           </div>
           <div className="col-md-6">
@@ -63,21 +66,21 @@ class Login extends Component {
               <h1 className="text-center p-3">Login</h1>
               <form>
                 <div className="form-row">
-                  <div className="form-group col-md-12 p-4">
-                    <label>userId</label>
+                  <div className="form-group col-md-12 px-4 mb-1">
+                    <label>Email</label>
                     <input
                       type="text"
                       className="form-control"
-                      id="userId"
-                      value={userId}
-                      name="userId"
-                      placeholder="userId"
+                      id="email"
+                      value={email}
+                      name="email"
+                      placeholder="email"
                       onChange={this.handleChange}
                     />
                   </div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group col-md-12 p-4 mb-0">
+                  <div className="form-group col-md-12 px-4 mb-0">
                     <label>Password</label>
                     <input
                       type="password"
@@ -89,17 +92,20 @@ class Login extends Component {
                       onChange={this.handleChange}
                     />
                   </div>
-                  {error && <div className="ml-5 ">
+                  {error && <div className="ml-4 mt-2">
                     <p className="text-danger">{error}</p></div>
                   }
                 </div>
-                <div className="form-group row ">
+                <div className="form-group row mt-4">
                   <div className="col text-center">
                     <div onClick={this.handleSubmit}>
                       <div className="btn btn-primary">Login</div>
                     </div>
                   </div>
                 </div>
+                <p className="text-center">
+                  Don't have account? <Link to="/signup">Create One</Link>
+                </p>
               </form>
             </div>
           </div>
@@ -111,4 +117,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Login

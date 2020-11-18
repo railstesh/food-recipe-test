@@ -8,13 +8,13 @@ const User = require("../models/userModel");
 const signup = async (req, res, next) => {
   console.log("signup api call", req.body);
   const {
-    body: { userId, userName, password },
+    body: { email, userName, password },
   } = req;
 
   // checking if user already exists
   let existingUser;
   try {
-    existingUser = await User.findOne({ userId: userId });
+    existingUser = await User.findOne({ email: email });
   } catch (err) {
     const error = new HttpResponse(
       "Signing up failed, Something went wrong while checking existing user",
@@ -41,7 +41,7 @@ const signup = async (req, res, next) => {
   var createdUser;
 
   createdUser = new User({
-    userId,
+    email,
     userName,
     password: hashedPassword,
   });
@@ -58,7 +58,7 @@ const signup = async (req, res, next) => {
   try {
     token = jwt.sign(
       {
-        userId: createdUser.userId,
+        email: createdUser.email,
         userName: createdUser.userName,
       },
       "This is store-app Prive Key",
@@ -73,12 +73,12 @@ const signup = async (req, res, next) => {
   }
 
   res.status(201).json({
-    userId: createdUser.userId,
+    email: createdUser.email,
     userName: createdUser.userName,
     token: token,
   });
   res.send({
-    userId: createdUser.userId,
+    email: createdUser.email,
     userName: createdUser.userName,
     token: token,
   });
@@ -88,13 +88,13 @@ const signup = async (req, res, next) => {
 
 // LOGIN FUNCTION
 const login = async (req, res) => {
-  const { userId, password } = req.body;
+  const { email, password } = req.body;
 
   //trying to find if user email exists.
   let existingUser;
 
   try {
-    existingUser = await User.findOne({ userId: userId });
+    existingUser = await User.findOne({ email: email });
   } catch (err) {
     const error = new HttpResponse(
       "Something went wrong while checking user email",
@@ -127,7 +127,7 @@ const login = async (req, res) => {
   //generating JWT TOKEN- DO NOT TOUCH
   let token;
   try {
-    token = jwt.sign({ userId: userId }, "key", {
+    token = jwt.sign({ email: email }, "key", {
       expiresIn: "1h",
     });
   } catch (err) {
@@ -138,7 +138,7 @@ const login = async (req, res) => {
     return res.status(500).json({ response: error });
   }
   res.json({
-    userId: userId,
+    email: email,
     token: token,
   });
 };

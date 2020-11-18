@@ -28,7 +28,7 @@ const FoodRecipePage = ({
         className="card-img-top mx-auto img-fluid img-circle d-block mb-0"
         src={food}
       />
-      <div className="row text-center">
+      <div className="row text-center m-0">
         <div className="col-12 mt-5">
           <h1 className="text-center">{recipeName}</h1>
           <div className="row">

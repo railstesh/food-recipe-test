@@ -1,45 +1,49 @@
 import React, { Component } from 'react';
-import { signupUser } from "../../apiServices"
 import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
+
+import { signupUser } from "../../apiServices"
 
 class Signup extends Component {
   state = {
-    userId: '',
+    email: '',
     password: '',
     userName: '',
     userSignup: false,
   }
-
   handleSubmit = (event) => {
     event.preventDefault();
     const {
       state: {
         userName,
         password,
-        userId,
+        email,
       },
     } = this;
 
     const user = {
       userName,
-      userId,
+      email,
       password,
     }
     console.log(user)
-    signupUser(user).then((res) => {
-      if (res && res.success) {
-        this.setState({
-          userSignup: true,
-          userId: "",
-          password: "",
-          userName: ""
-        })
-        console.log("sucess")
-      } else {
-        this.setState({ error: "something wrong" })
-      }
-    })
-
+    if (email !== "" && password !== "") {
+      signupUser(user).then((res) => {
+        if (res && res.success) {
+          this.setState({
+            userSignup: true,
+            email: "",
+            password: "",
+            userName: ""
+          })
+          localStorage.setItem("userLogin", JSON.stringify(true))
+        } else {
+          this.setState({ error: "User exists already, please login instead" }) 
+        }
+      })
+    } else {
+      this.setState({ error: "fields required" })
+    }
   };
 
   handleChange = (event) => {
@@ -55,7 +59,7 @@ class Signup extends Component {
       state: {
         userName,
         userSignup,
-        userId,
+        email,
         password,
         error,
       },
@@ -64,7 +68,7 @@ class Signup extends Component {
     return (
       <>
         {userSignup && <Redirect to={`/home`} />}
-        <div className="row">
+        <div className="row m-0">
           <div className="col-md-3">
           </div>
           <div className="col-md-6">
@@ -72,38 +76,35 @@ class Signup extends Component {
               <h1 className="text-center p-3">Signup</h1>
               <form>
                 <div className="form-row">
-                  <div className="form-group col-md-12 p-4">
-                    <label>userId</label>
+                  <div className="form-group col-md-12 px-4 mb-0">
+                    <label>Email</label>
                     <input
                       type="text"
                       className="form-control"
-                      id="userId"
-                      value={userId}
-                      name="userId"
-                      placeholder="userId"
+                      id="email"
+                      value={email}
+                      name="email"
+                      placeholder="email"
                       onChange={this.handleChange}
                     />
                   </div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group col-md-12 p-4 mb-0">
-                    <label>User Name</label>
+                  <div className="form-group col-md-12 px-4 py-1 mb-0">
+                    <label>Name</label>
                     <input
                       type="text"
                       className="form-control"
                       id="userName"
                       value={userName}
                       name="userName"
-                      placeholder="user@123"
+                      placeholder="xyz abc"
                       onChange={this.handleChange}
                     />
                   </div>
-                  {error && <div className="ml-5 ">
-                    <p className="text-danger">{error}</p></div>
-                  }
                 </div>
                 <div className="form-row">
-                  <div className="form-group col-md-12 p-4 mb-0">
+                  <div className="form-group col-md-12 px-4 py-1 mb-0">
                     <label>Password</label>
                     <input
                       type="password"
@@ -115,17 +116,20 @@ class Signup extends Component {
                       onChange={this.handleChange}
                     />
                   </div>
-                  {error && <div className="ml-5 ">
-                    <p className="text-danger">{error}</p></div>
-                  }
                 </div>
-                <div className="form-group row ">
+                {error && <div className="ml-5 ">
+                  <p className="text-danger">{error}</p></div>
+                }
+                <div className="form-group row mt-4">
                   <div className="col text-center">
                     <div onClick={this.handleSubmit}>
                       <div className="btn btn-primary">Signup</div>
                     </div>
                   </div>
                 </div>
+                <p className="ml-5">
+                  Already have account? <Link to="/">Login Now!</Link>
+                </p>
               </form>
             </div>
           </div>

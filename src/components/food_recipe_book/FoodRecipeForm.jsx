@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
 import { addFoodRecipes } from '../../apiServices';
+import { Redirect } from 'react-router';
 
 class FoodRecipeForm extends Component {
   state = {
     recipeName: '',
-    recipeAuthorName: '',
-    recipeType: '',
+    recipeType: 'veg',
     recipeDescription: '',
     ingredient: '',
     recipeIngredients: [],
     recipeDirections: [],
     error: '',
+    ingredientsError: '',
+    addedSuccessfully: false
   }
 
   handleChange = (event) => {
@@ -18,6 +20,7 @@ class FoodRecipeForm extends Component {
     this.setState({
       [event.target.name]: event.target.value,
       error: "",
+      ingredientsError: "",
     });
   };
 
@@ -29,76 +32,77 @@ class FoodRecipeForm extends Component {
     event.preventDefault();
     const { recipeIngredients, ingredient } = this.state
     const recipeIngredientsRef = recipeIngredients
-    recipeIngredientsRef.push(ingredient)
-    this.setState({ recipeIngredients: recipeIngredientsRef, ingredient: '' })
+    if (ingredient !== "") {
+      recipeIngredientsRef.push(ingredient)
+      this.setState({ recipeIngredients: recipeIngredientsRef, ingredient: '' })
+    } else {
+      this.setState({ ingredientsError: "please add ingredient" })
+    }
+  }
+
+  handleDeleteIngredient = (item) => {
+    const { recipeIngredients } = this.state
+    const recipeIngredientsRef = recipeIngredients
+    const recipe = recipeIngredientsRef.filter((element) => element !== item)
+    this.setState({ recipeIngredients: recipe })
   }
 
   handleSubmit = (event) => {
-    const { recipeAuthorName, recipeName,
-      recipeDescription, recipeType, recipeIngredients } = this.state
+    const { recipeName, recipeDescription, recipeType, recipeIngredients } = this.state
 
     event.preventDefault();
     let recipeUniqueId = Math.random().toString(36).substr(2, 9)
     const recipe = {
-      recipeAuthorName: recipeAuthorName,
       recipeDescription: recipeDescription,
       recipeIngredients: recipeIngredients,
       recipeId: recipeUniqueId,
       recipeType: recipeType,
       recipeName: recipeName,
     }
-    console.log(recipe)
-    addFoodRecipes(recipe).then((res) => {
-      if (res && res.success) {
-        this.setState({
-          recipeDescription: "", recipeAuthorName: '',
-          recipeIngredients: [], recipeType: '', recipeName: ''
-        })
-      } else {
-        this.setState({ error: "something wrong" })
-      }
-    })
+    if (recipeName !== "" && recipeDescription !== "") {
+      addFoodRecipes(recipe).then((res) => {
+        if (res && res.success) {
+          this.setState({
+            recipeDescription: "",
+            recipeIngredients: [], recipeType: '', recipeName: '',
+            addedSuccessfully: true
+          })
+        }
+      })
+    } else {
+      this.setState({ error: "fileds required" })
+    }
   }
 
   render() {
-    const { recipeAuthorName, recipeName, recipeType, ingredient,
-      recipeDescription, recipeIngredients } = this.state
+    const { recipeName, recipeType, ingredient, addedSuccessfully,
+      recipeDescription, recipeIngredients, error, ingredientsError
+    } = this.state
 
     return (
       <>
-        <h1 className="text-center mt-3">Add New Recipe Form</h1>
-        <div className="row">
+        {addedSuccessfully && <Redirect to={`/home`} />}
+        <h1 className="text-center mt-3">Add New Recipe</h1>
+        <div className="row m-0">
           <div className="col-md-1"></div>
           <div className="col-md-10">
             <div className="row pt-5">
-              <div className="form-group col-md-6">
-                <label>Food Recipe Name</label>
+              <div className="form-group col-md-12">
+                <label>Recipe Name</label>
                 <input
                   type="text"
                   className="form-control"
                   id="recipeName"
                   value={recipeName}
                   name="recipeName"
-                  placeholder="zxcvf"
-                  onChange={this.handleChange}
-                />
-              </div>
-              <div className="form-group col-md-6">
-                <label>Recipe Author Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="recipeAuthorName"
-                  value={recipeAuthorName}
-                  name="recipeAuthorName"
-                  placeholder="Werty kio"
+                  placeholder="Cheesy Bacon Spinach Dip"
                   onChange={this.handleChange}
                 />
               </div>
             </div>
             <div className="row">
               <div className="form-group col-md-6">
-                <label>Food Recipe Type</label>
+                <label>Recipe Type</label>
                 <div>
                   <input
                     type="radio"
@@ -117,7 +121,6 @@ class FoodRecipeForm extends Component {
                   />
                   <label className="pl-2">Non-Veg</label>
                 </div>
-
               </div>
               <div className="form-group col-md-6">
                 <label>Recipe Description</label>
@@ -127,7 +130,7 @@ class FoodRecipeForm extends Component {
                   id="recipeDescription"
                   value={recipeDescription}
                   name="recipeDescription"
-                  placeholder="Werty kio"
+                  placeholder="good food recipe"
                   onChange={this.handleChange}
                 />
               </div>
@@ -137,7 +140,12 @@ class FoodRecipeForm extends Component {
                 <label>Ingredients List</label>
                 {recipeIngredients.map((item, i) => (
                   <ul key={i}>
-                    <li>{item}</li>
+                    <li>
+                      {item}
+                      <i onClick={() => this.handleDeleteIngredient(item)}
+                        className="ml-3 fas fa-minus-circle">
+                      </i>
+                    </li>
                   </ul>
                 ))}
               </div>
@@ -151,7 +159,7 @@ class FoodRecipeForm extends Component {
                       id="ingredient"
                       value={ingredient}
                       name="ingredient"
-                      placeholder="Werty kio"
+                      placeholder="1 cup water"
                       onChange={this.handleChange}
                     />
                   </div>
@@ -161,7 +169,13 @@ class FoodRecipeForm extends Component {
                       <i className='fal fa-plus' />
                     </button>
                   </div>
+                  {ingredientsError && <div className="ml-5 ">
+                    <p className="text-danger">{ingredientsError}</p></div>
+                  }
                 </div>
+                {error && <div className="ml-4 mt-2">
+                  <p className="text-danger">{error}</p></div>
+                }
               </div>
             </div>
             <div className="form-group row ">

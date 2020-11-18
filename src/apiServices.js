@@ -64,6 +64,7 @@ export const getFoodRecipeDetails = (recipeId) => {
 }
 
 export const deleteRecipe = (recipeId) => {
+	debugger
 	return axios.post(`${api}/delete_recipe`, recipeId)
 		.then((res) => {
 			if (res.status === 200) {

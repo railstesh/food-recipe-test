@@ -6,7 +6,6 @@ const recipeSchema = new Schema({
   recipeId: { type: String },
   recipeName: { type: String },
   recipeType: { type: String },
-  recipeAuthorName: { type: String },
   recipeDescription: { type: String },
   recipeIngredients: { type: Array },
   recipeDirections: { type: Array },

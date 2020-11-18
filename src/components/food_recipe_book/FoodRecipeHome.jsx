@@ -7,32 +7,27 @@ import food from '../../assets/images/food4.jpeg'
 const FoodRecipeHome = () => {
   const [foodRecipes, setFoodRecipes] = useState([])
   const [openModal, setOpenModal] = useState(false)
-  const toggleModal = () => {
+  const [recipeId, setRecipeId] = useState('')
+  const toggleModal = (recipeId) => {
     setOpenModal(!openModal)
+    setRecipeId(recipeId)
   }
 
   useEffect(() => {
     getFoodRecipes().then((res) => {
       if (res && res.success) {
-        console.log(res)
         setFoodRecipes(res.data)
-      } else {
-        console.log("something wrong")
       }
     })
   }, [])
 
-  const handleDelete = (recipeId) => {
-    // const { recipeId } = data
+  const handleDelete = () => {
     deleteRecipe({ recipeId }).then((res) => {
       if (res && res.success) {
         setOpenModal(!openModal)
         getFoodRecipes().then((res) => {
           if (res && res.success) {
-            console.log(res)
             setFoodRecipes(res.data)
-          } else {
-            console.log("something wrong")
           }
         })
       }
@@ -49,11 +44,11 @@ const FoodRecipeHome = () => {
       </div>
       <div className="row m-0 p-3">
         {foodRecipes.map((item, i) => (
-          <FoodRecipeCard 
-            data={item} 
-            key={i} 
-            toggleModal={toggleModal} 
-            handleDelete={handleDelete} 
+          <FoodRecipeCard
+            data={item}
+            key={i}
+            toggleModal={toggleModal}
+            handleDelete={handleDelete}
             openModal={openModal}
           />
         ))}

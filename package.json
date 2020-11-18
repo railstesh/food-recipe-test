@@ -11,6 +11,7 @@
     "bootstrap": "^4.5.3",
     "cors": "^2.8.5",
     "jsonwebtoken": "^8.5.1",
+    "node-sass": "^5.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",
@@ -20,6 +21,7 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
+    "start-server": "nodemon ./server/server.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
