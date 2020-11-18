@@ -7,6 +7,9 @@ class FoodRecipeForm extends Component {
     recipeAuthorName: '',
     recipeType: '',
     recipeDescription: '',
+    ingredient: '',
+    recipeIngredients: [],
+    recipeDirections: [],
     error: '',
   }
 
@@ -22,15 +25,24 @@ class FoodRecipeForm extends Component {
     this.setState({ recipeType: value })
   }
 
+  handleIngredients = (event) => {
+    event.preventDefault();
+    const { recipeIngredients, ingredient } = this.state
+    const recipeIngredientsRef = recipeIngredients
+    recipeIngredientsRef.push(ingredient)
+    this.setState({ recipeIngredients: recipeIngredientsRef, ingredient: '' })
+  }
+
   handleSubmit = (event) => {
     const { recipeAuthorName, recipeName,
-      recipeDescription, recipeType } = this.state
+      recipeDescription, recipeType, recipeIngredients } = this.state
 
     event.preventDefault();
     let recipeUniqueId = Math.random().toString(36).substr(2, 9)
     const recipe = {
       recipeAuthorName: recipeAuthorName,
       recipeDescription: recipeDescription,
+      recipeIngredients: recipeIngredients,
       recipeId: recipeUniqueId,
       recipeType: recipeType,
       recipeName: recipeName,
@@ -47,8 +59,8 @@ class FoodRecipeForm extends Component {
   }
 
   render() {
-    const { recipeAuthorName, recipeName, recipeType,
-      recipeDescription } = this.state
+    const { recipeAuthorName, recipeName, recipeType, ingredient,
+      recipeDescription, recipeIngredients } = this.state
 
     return (
       <>
@@ -118,8 +130,40 @@ class FoodRecipeForm extends Component {
                 />
               </div>
             </div>
+            <div className="row">
+              <div className="form-group col-md-6">
+                <label>Ingredients List</label>
+                {recipeIngredients.map((item, i) => (
+                  <ul key={i}>
+                    <li>{item}</li>
+                  </ul>
+                ))}
+              </div>
+              <div className="form-group col-md-6">
+                <label>Add Ingredients</label>
+                <div className="row">
+                  <div className="col-10">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="ingredient"
+                      value={ingredient}
+                      name="ingredient"
+                      placeholder="Werty kio"
+                      onChange={this.handleChange}
+                    />
+                  </div>
+                  <div className="col-2">
+                    <button className="btn btn-sm btn-primary"
+                      onClick={this.handleIngredients}>
+                      <i className='fal fa-plus' />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className="form-group row ">
-              <div className="col text-center">
+              <div className="col text-right mt-5">
                 <button className="btn btn-primary" type="submit" onClick={this.handleSubmit}>
                   Create Recipe
                 </button>
