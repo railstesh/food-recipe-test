@@ -49,9 +49,11 @@ class FoodRecipeForm extends Component {
     }
     console.log(recipe)
     addFoodRecipes(recipe).then((res) => {
-      debugger
       if (res && res.success) {
-        this.setState({ recipeDescription: "" })
+        this.setState({
+          recipeDescription: "", recipeAuthorName: '',
+          recipeIngredients: [], recipeType: '', recipeName: ''
+        })
       } else {
         this.setState({ error: "something wrong" })
       }

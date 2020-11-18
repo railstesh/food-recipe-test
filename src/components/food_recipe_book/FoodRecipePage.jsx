@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { getFoodRecipeDetails } from '../../apiServices'
+import food from '../../assets/images/food3.jpeg'
 
 const FoodRecipePage = ({
   match
@@ -23,6 +24,10 @@ const FoodRecipePage = ({
 
   return (
     <>
+      <img
+        className="card-img-top mx-auto img-fluid img-circle d-block mb-0"
+        src={food}
+      />
       <div className="row text-center">
         <div className="col-12 mt-5">
           <h1 className="text-center">{recipeName}</h1>

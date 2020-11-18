@@ -59,6 +59,18 @@ export const getFoodRecipeDetails = (recipeId) => {
 			}
 		})
 		.catch((error) => {
-			console.log('recipes fetch error', error)
+			console.log('recipes get error', error)
+		})
+}
+
+export const deleteRecipe = (recipeId) => {
+	return axios.post(`${api}/delete_recipe`, recipeId)
+		.then((res) => {
+			if (res.status === 200) {
+				return { success: true }
+			}
+		})
+		.catch((error) => {
+			console.log('recipes delete error', error)
 		})
 }

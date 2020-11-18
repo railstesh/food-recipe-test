@@ -7,6 +7,6 @@ router.post("/add_recipe", foodRecipeController.addRecipe)
 router.post("/get_recipe", foodRecipeController.getRecipe)
 router.get("/fetch_recipes", foodRecipeController.fetchRecipes)
 router.put("/edit_recipe", foodRecipeController.editRecipe)
-router.delete("/delete_recipe", foodRecipeController.deleteRecipe)
+router.post("/delete_recipe", foodRecipeController.deleteRecipe)
 
 module.exports = router
