@@ -9,10 +9,10 @@ const App = () => {
   const [user, setUser] = useState({ ...userState })
 
   return (
-    <>
+    <div>
       <Header user={user} setUser={setUser} />
       <AppRoutes isLoggedIn={user.isLoggedIn} setUser={setUser} />
-    </>
+    </div>
   );
 };
 

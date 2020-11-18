@@ -3,7 +3,6 @@ import { Redirect } from 'react-router';
 
 import { getFoodRecipes, deleteRecipe } from '../../apiServices'
 import FoodRecipeCard from './FoodRecipeCard'
-import food from '../../assets/images/food4.jpeg'
 
 const FoodRecipeHome = ({ isLoggedIn }) => {
   const [foodRecipes, setFoodRecipes] = useState([])
@@ -38,16 +37,10 @@ const FoodRecipeHome = ({ isLoggedIn }) => {
   }
 
   return (
-    <>
-      <div className="card">
-        <img
-          className="card-img-top mx-auto img-fluid img-circle d-block mb-0"
-          src={food}
-        />
-        <div className="card-img-overlay text-center">
-          <h1 className="card-title text-white mt-5">Food Recipe Book</h1>
-        </div>
-      </div>
+    <div className='banner'>
+      <h3 className='heading pt-4'>
+        “Let food be thy medicine and medicine be thy food.”
+      </h3>
       <div className="row m-0 p-3">
         {foodRecipes.map((item, i) => (
           <FoodRecipeCard
@@ -59,7 +52,7 @@ const FoodRecipeHome = ({ isLoggedIn }) => {
           />
         ))}
       </div>
-    </>
+    </div>
   )
 }
 

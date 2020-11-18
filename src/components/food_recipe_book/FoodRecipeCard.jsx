@@ -7,6 +7,11 @@ import food5 from '../../assets/images/food5.png'
 import veg from '../../assets/images/veg.png'
 import nonVeg from '../../assets/images/non-veg.png'
 
+const truncate = text => {
+  if (text.length > 70) return text.substring(0, 70) + '...';
+  return text;
+};
+
 const FoodRecipeCard = ({
   data,
   handleDelete,
@@ -60,7 +65,7 @@ const FoodRecipeCard = ({
               </div>
             </div>
             <p className="card-content mt-1 mb-0">
-              {data.recipeDescription}
+              {truncate(data.recipeDescription)}
             </p>
           </div>
         </div>
