@@ -26,3 +26,15 @@ export const signupUser = (user) => {
 			console.log('Signup error', error)
 		})
 }
+
+export const addFoodRecipes = (recipe) => {
+  return axios.post(`${api}/add_recipe`, recipe)
+		.then((res) => {
+			if (res.status === 200) {
+        return { success: true }
+			}
+		})
+		.catch((error) => {
+			console.log('recipes add error', error)
+		})
+}
