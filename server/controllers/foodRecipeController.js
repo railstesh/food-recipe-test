@@ -94,8 +94,21 @@ const deleteRecipe = async (req, res) => {
   }
 };
 
+const setRecipesData = async (req, res) => {
+  try {
+    var recipeData = await Recipe.find({});
+    if (recipeData.length === 0) {
+      await Recipe.insertMany(req);
+      console.log("recipes data feeded");
+    }
+  } catch (err) {
+    return res.status(500).json({ response: error });
+  }
+};
+
 exports.addRecipe = addRecipe;
 exports.editRecipe = editRecipe;
 exports.fetchRecipes = fetchRecipes;
 exports.getRecipe = getRecipe;
 exports.deleteRecipe = deleteRecipe;
+exports.setRecipesData = setRecipesData;

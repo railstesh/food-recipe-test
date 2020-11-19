@@ -13,21 +13,27 @@ class FoodRecipeForm extends Component {
     recipeDirections: [],
     error: '',
     ingredientsError: '',
-    addedSuccessfully: false
+    addedSuccessfully: false,
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     const {
-      match: { params: { recipeId } }
+      match,
+      history: { push }
     } = this.props
 
+    const recipeId = match && match.params && match.params.recipeId && match.params.recipeId || null 
+
     if (recipeId) {
-      getFoodRecipeDetails({ recipeId }).then((res) => {
-        if (res && res.success) {
-          this.initializeForm(res.data)
-        } else {
+      getFoodRecipeDetails({ recipeId }).then((res) => { 
+        if (res && res.success && res.data) this.initializeForm(res.data)
+        else {
           console.log("something wrong")
+          push('/home')
         }
+      }).catch(error => {
+        console.log(error)
+        push('/home')
       })
     }
   }
@@ -35,6 +41,7 @@ class FoodRecipeForm extends Component {
   initializeForm = (data) => {
     const { recipeDescription, recipeIngredients, recipeName, recipeType,
     } = data
+
     const savedRecord = {
       recipeIngredients,
       recipeName,
@@ -120,17 +127,26 @@ class FoodRecipeForm extends Component {
   }
 
   render() {
-    const { recipeName, recipeType, ingredient, addedSuccessfully,
-      recipeDescription, recipeIngredients, error, ingredientsError
-    } = this.state
     const {
-      match: { params: { recipeId } }
-    } = this.props
+      state: {
+        recipeName, recipeType, ingredient, addedSuccessfully,
+      recipeDescription, recipeIngredients, error, ingredientsError,
+    },
+    props: {
+      match,
+      isLoggedIn
+    }} = this
+
+    const recipeId = match && match.params && match.params.recipeId && match.params.recipeId || null 
+  
+    if (!isLoggedIn) return <Redirect to='/' />
+    if (addedSuccessfully) return <Redirect to='/home' />
 
     return (
       <>
-        {addedSuccessfully && <Redirect to={`/home`} />}
-        <h1 className="text-center mt-3">Add New Recipe</h1>
+        <h1 className="text-center mt-3">
+          {recipeId ? "Edit Recipe" : "Add New Recipe"}
+        </h1>
         <div className="row m-0">
           <div className="col-md-1"></div>
           <div className="col-md-10">
@@ -150,7 +166,7 @@ class FoodRecipeForm extends Component {
             </div>
             <div className="row">
               <div className="form-group col-md-6">
-                <label>Recipe Type</label>
+                <label>Type</label>
                 <div>
                   <input
                     type="radio"
@@ -171,7 +187,7 @@ class FoodRecipeForm extends Component {
                 </div>
               </div>
               <div className="form-group col-md-6">
-                <label>Recipe Description</label>
+                <label>Description</label>
                 <textarea
                   type="textarea"
                   className="form-control"

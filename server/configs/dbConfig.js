@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const config = require("./index");
+const setRecipes = require("../controllers/foodRecipeController");
 const host = config.database.host;
 const port = config.database.port;
 const db = config.database.db_name;
@@ -19,5 +20,6 @@ module.exports = mongoose.connect(
       process.exit(1);
     }
     console.log(`🙌 💾 ${mongodb_uri} connected successfully 💽 🙌`);
+    setRecipes.setRecipesData(); //seeding data
   }
 );

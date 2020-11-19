@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react'
+import { Redirect } from 'react-router';
 
 import { getFoodRecipeDetails } from '../../apiServices'
 import food from '../../assets/images/food3.jpeg'
 
-const FoodRecipePage = (props) => {
+const FoodRecipePage = ({
+  isLoggedIn,
+  match: { params: { recipeId } }
+}) => {
   const [foodRecipe, setFoodRecipe] = useState([])
+
   useEffect(() => {
-    const { match: { params: { recipeId } } } = props
     getFoodRecipeDetails({ recipeId }).then((res) => {
       if (res && res.success) {
         setFoodRecipe(res.data)
@@ -15,6 +19,8 @@ const FoodRecipePage = (props) => {
       }
     })
   }, [])
+
+  if (!isLoggedIn) return <Redirect to='/' />
 
   const { recipeIngredients, recipeName, recipeDescription } = foodRecipe
 

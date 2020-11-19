@@ -17,11 +17,13 @@ const FoodRecipeCard = ({
     <>
       <div className="col-md-3 m-0 mb-3 px-2 service-card">
         <div className="card shadow p-3">
-          <img
-            className="card-img-top mx-auto img-fluid img-circle d-block mb-0"
-            src={food5}
-            alt="avatar"
-          />
+          <Link to={`/recipe_page/${data.recipeId}`}>
+            <img
+              className="card-img-top mx-auto img-fluid img-circle d-block mb-0"
+              src={food5}
+              alt="avatar"
+            />
+          </Link>
           <div className="card-body p-2">
             <div className="row">
               <div className="col-8">

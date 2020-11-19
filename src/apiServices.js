@@ -19,7 +19,7 @@ export const signupUser = (user) => {
   return axios.post(`${api}/user/signup`, user)
 		.then((res) => {
 			if (res.status === 201) {
-        return { success: true }
+        return { success: true, data: res.data }
 			}
 		})
 		.catch((error) => {

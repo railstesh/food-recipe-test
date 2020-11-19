@@ -9,7 +9,6 @@ class Signup extends Component {
     email: '',
     password: '',
     userName: '',
-    userSignup: false,
   }
   handleSubmit = (event) => {
     event.preventDefault();
@@ -19,6 +18,7 @@ class Signup extends Component {
         password,
         email,
       },
+      props: { setUser }
     } = this;
 
     const user = {
@@ -27,23 +27,21 @@ class Signup extends Component {
       password,
     }
     console.log(user)
+
     if (email !== "" && password !== "") {
       signupUser(user).then((res) => {
         if (res && res.success) {
           this.setState({
-            userSignup: true,
             email: "",
             password: "",
             userName: ""
           })
-          localStorage.setItem("userLogin", JSON.stringify(true))
+          setUser({ name: userName, isLoggedIn: true })
         } else {
-          this.setState({ error: "User exists already, please login instead" }) 
+          this.setState({ error: "User exists already, please login instead" })
         }
       })
-    } else {
-      this.setState({ error: "fields required" })
-    }
+    } else this.setState({ error: "fields required" })
   };
 
   handleChange = (event) => {
@@ -58,85 +56,83 @@ class Signup extends Component {
     const {
       state: {
         userName,
-        userSignup,
         email,
         password,
         error,
       },
+      props: { isLoggedIn }
     } = this;
 
+    if (isLoggedIn) return <Redirect to={`/home`} />
+
     return (
-      <>
-        {userSignup && <Redirect to={`/home`} />}
-        <div className="row m-0">
-          <div className="col-md-3">
-          </div>
-          <div className="col-md-6">
-            <div className="card mt-5">
-              <h1 className="text-center p-3">Signup</h1>
-              <form>
-                <div className="form-row">
-                  <div className="form-group col-md-12 px-4 mb-0">
-                    <label>Email</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="email"
-                      value={email}
-                      name="email"
-                      placeholder="email"
-                      onChange={this.handleChange}
-                    />
+      <div className="row m-0">
+        <div className="col-md-3">
+        </div>
+        <div className="col-md-6">
+          <div className="card mt-5">
+            <h1 className="text-center p-3">Signup</h1>
+            <form>
+              <div className="form-row">
+                <div className="form-group col-md-12 px-4 py-1 mb-0">
+                  <label>Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="userName"
+                    value={userName}
+                    name="userName"
+                    placeholder="john white"
+                    onChange={this.handleChange}
+                  />
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group col-md-12 px-4 mb-0">
+                  <label>Email</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="email"
+                    value={email}
+                    name="email"
+                    placeholder="email"
+                    onChange={this.handleChange}
+                  />
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-group col-md-12 px-4 py-1 mb-0">
+                  <label>Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    value={password}
+                    name="password"
+                    placeholder="xxxxxx"
+                    onChange={this.handleChange}
+                  />
+                </div>
+              </div>
+              {error && <div className="ml-4 ">
+                <p className="text-danger">{error}</p></div>
+              }
+              <div className="form-group row mt-4">
+                <div className="col text-center">
+                  <div onClick={this.handleSubmit}>
+                    <div className="btn btn-primary">Signup</div>
                   </div>
                 </div>
-                <div className="form-row">
-                  <div className="form-group col-md-12 px-4 py-1 mb-0">
-                    <label>Name</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="userName"
-                      value={userName}
-                      name="userName"
-                      placeholder="xyz abc"
-                      onChange={this.handleChange}
-                    />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-group col-md-12 px-4 py-1 mb-0">
-                    <label>Password</label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="password"
-                      value={password}
-                      name="password"
-                      placeholder="xxxxxx"
-                      onChange={this.handleChange}
-                    />
-                  </div>
-                </div>
-                {error && <div className="ml-5 ">
-                  <p className="text-danger">{error}</p></div>
-                }
-                <div className="form-group row mt-4">
-                  <div className="col text-center">
-                    <div onClick={this.handleSubmit}>
-                      <div className="btn btn-primary">Signup</div>
-                    </div>
-                  </div>
-                </div>
-                <p className="ml-5">
-                  Already have account? <Link to="/">Login Now!</Link>
-                </p>
-              </form>
-            </div>
-          </div>
-          <div className="col-md-3">
+              </div>
+              <p className="ml-5">
+                Already have account? <Link to="/">Login Now!</Link>
+              </p>
+            </form>
           </div>
         </div>
-      </>
+        <div className="col-md-3" />
+      </div>
     );
   }
 }

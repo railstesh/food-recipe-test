@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
-import { Redirect} from 'react-router'
+import { Redirect } from 'react-router'
+
 import { loginUser } from "../../apiServices"
 
 class Login extends Component {
@@ -8,7 +9,6 @@ class Login extends Component {
     email: '',
     password: '',
     error: '',
-    userLogin: false,
   }
 
   handleSubmit = (event) => {
@@ -18,23 +18,19 @@ class Login extends Component {
         password,
         email,
       },
+      props: { setUser }
     } = this;
 
-    const user = {
-      email,
-      password,
-    }
+    const user = { email, password }
+
     if (email !== "" && password !== "") {
       loginUser(user).then((res) => {
         if (res && res.success) {
-          this.setState({ userLogin: true, email: "", password: "" })
-        } else {
-          this.setState({ error: "Invalid User" })
-        }
+          this.setState({ email: "", password: "" }) // reset form
+          setUser({ name: res.data && res.data.userName, isLoggedIn: true })
+        } else this.setState({ error: "Invalid User" })
       })
-    } else {
-      this.setState({ error: "Invalid User" })
-    }
+    } else this.setState({ error: "Invalid User" })
   };
 
   handleChange = (event) => {
@@ -51,13 +47,14 @@ class Login extends Component {
         email,
         password,
         error,
-        userLogin,
       },
+      props: { isLoggedIn }
     } = this;
+
+    if (isLoggedIn) return <Redirect to={`/home`} />
 
     return (
       <>
-        {userLogin && <Redirect to={`/home`} />}
         <div className="row m-0">
           <div className="col-md-3">
           </div>
